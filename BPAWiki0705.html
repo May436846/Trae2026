@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微宏BPA平台 · 深度拆解Wiki</title>
+<style>
+:root{
+--bg:#f5f6fa;--bg2:#fff;--ink:#1a1a2e;--muted:#6b7280;--rule:#e5e7eb;
+--accent:#c62828;--accent2:#1565c0;--accent3:#2e7d32;--warn:#f57f17;--code:#37474f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+.layout{display:flex;max-width:1280px;margin:0 auto;gap:0}
+.toc{width:240px;position:sticky;top:0;height:100vh;overflow-y:auto;padding:24px 16px;background:var(--bg2);border-right:1px solid var(--rule);flex-shrink:0}
+.toc h3{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+.toc a{display:block;padding:6px 10px;font-size:13px;color:var(--ink);text-decoration:none;border-radius:4px;margin-bottom:2px;border-left:3px solid transparent;transition:all .15s}
+.toc a:hover{background:#fce4ec;border-left-color:var(--accent);color:var(--accent)}
+.toc a.sub{padding-left:24px;font-size:12px;color:var(--muted)}
+.content{flex:1;padding:40px 48px;min-width:0;max-width:1040px}
+.hero{background:linear-gradient(135deg,#c62828,#e53935);color:#fff;padding:48px 40px;border-radius:12px;margin-bottom:32px}
+.hero h1{font-size:30px;margin-bottom:8px}
+.hero .meta{font-size:14px;opacity:1;margin-top:12px;display:flex;gap:16px;flex-wrap:wrap}
+.hero .meta span{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+.section{background:var(--bg2);border-radius:10px;padding:32px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.section h2{font-size:22px;color:var(--accent);border-left:5px solid var(--accent);padding-left:14px;margin-bottom:20px}
+.section h3{font-size:17px;color:var(--ink);margin:24px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--rule)}
+.section h4{font-size:15px;color:var(--accent2);margin:16px 0 8px}
+p{margin-bottom:10px;color:#374151}
+.note{background:#fff3e0;border-left:4px solid var(--warn);padding:12px 16px;border-radius:4px;margin:14px 0;font-size:14px}
+.note.green{background:#e8f5e9;border-left-color:var(--accent3)}
+.note.blue{background:#e3f2fd;border-left-color:var(--accent2)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+th{background:var(--accent);color:#fff;padding:10px 8px;text-align:left;font-weight:600;white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:nth-child(even){background:#fafafa}
+tr:hover{background:#fff8f8}
+.table-wrap{overflow-x:auto;margin:12px 0;max-height:600px;overflow-y:auto}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin:16px 0}
+.role-card{border:1px solid var(--rule);border-radius:8px;padding:16px;background:linear-gradient(135deg,#fff,#fafafa)}
+.role-card .icon{font-size:28px;margin-bottom:8px}
+.role-card h4{color:var(--accent);margin-bottom:6px;font-size:16px}
+.role-card .terminal{font-size:11px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px}
+.role-card .terminal.portal{background:var(--accent2)}
+.role-card .terminal.both{background:var(--accent3)}
+.role-card ul{list-style:none;padding-left:0;margin-top:8px}
+.role-card li{font-size:12px;color:var(--muted);padding:2px 0;border-bottom:1px dashed var(--rule)}
+.role-card li:last-child{border:none}
+.mermaid{background:#fff;text-align:center;padding:16px;border-radius:8px;margin:16px 0;border:1px solid var(--rule)}
+.figure{margin:20px 0;text-align:center}
+.figure figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+.chart-box{width:100%;min-height:380px;margin:16px 0}
+.tech-card{border-left:4px solid var(--accent);background:#fff;border-radius:8px;padding:16px;margin:12px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tech-card .level{float:right;font-size:11px;padding:2px 8px;border-radius:10px;color:#fff}
+.tech-card .level.high{background:#d32f2f}
+.tech-card .level.mid{background:var(--warn)}
+.tech-card .level.low{background:var(--accent3)}
+.tech-card h4{color:var(--accent);margin-bottom:8px}
+.tech-card .impact{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule)}
+.scenario-card{border:1px solid var(--rule);border-radius:8px;padding:20px;margin:12px 0;background:#fff}
+.scenario-card .num{display:inline-block;width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-size:14px;font-weight:700;margin-right:8px}
+.scenario-card h4{display:inline;color:var(--ink);font-size:16px}
+.scenario-card .actors{margin-top:8px;font-size:12px}
+.scenario-card .actors span{display:inline-block;background:#e3f2fd;color:var(--accent2);padding:2px 8px;border-radius:10px;margin-right:4px;margin-bottom:4px}
+code{background:#f5f5f5;color:var(--code);padding:2px 6px;border-radius:3px;font-family:"JetBrains Mono","Source Code Pro",monospace;font-size:13px}
+.kpi-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.kpi{flex:1;min-width:120px;text-align:center;background:linear-gradient(135deg,var(--accent),#ef5350);color:#fff;padding:14px;border-radius:8px}
+.kpi .v{font-size:24px;font-weight:700}
+.kpi .l{font-size:12px;opacity:.9}
+@media(max-width:900px){.toc{display:none}.content{padding:20px}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="toc">
+<h3>Wiki 目录</h3>
+<a href="#overview">1. 项目概述</a>
+<a href="#roles">2. 用户角色拆解</a>
+<a href="#scenarios">3. 使用场景</a>
+<a href="#flows">4. 业务流程</a>
+<a href="#architecture">5. 业务架构</a>
+<a href="#tech">6. 技术卡点</a>
+<a href="#roadmap">7. 后续优化方向</a>
+</nav>
+
+<div class="content">
+
+<!-- ========== HERO ========== -->
+<div class="hero">
+<h1>微宏BPA流程规划设计平台</h1>
+<p style="font-size:16px;opacity:1;color:#fff">深度拆解 Wiki · 用户角色 / 使用场景 / 业务流程 / 业务架构 / 技术卡点 / 优化方向</p>
+<div class="meta">
+<span>体验地址：demo-bpa.flowyun.com</span>
+<span>账号：TY0177</span>
+<span>整理日期：2026-07-05</span>
+<span>数据来源：实际探索 + 操作手册</span>
+</div>
+</div>
+
+<!-- ========== 1. 项目概述 ========== -->
+<div class="section" id="overview">
+<h2>一、项目概述</h2>
+<p>微宏BPA（Business Process Architecture）流程规划设计平台是一款面向中大型企业的<strong>业务流程架构全生命周期管理</strong>产品。它不是简单的流程图绘制工具，而是一套将"流程架构树"作为组织全部业务流程主干，通过管理要素（角色、风险、术语、指标、控制措施）与流程节点关联，实现<strong>流程规划→设计→发布→宣贯→监控→优化</strong>闭环的企业级平台。</p>
+
+<h3>核心定位</h3>
+<div class="kpi-row">
+<div class="kpi"><div class="v">2端</div><div class="l">门户+工作台</div></div>
+<div class="kpi"><div class="v">15</div><div class="l">一级模块</div></div>
+<div class="kpi"><div class="v">80+</div><div class="l">二/三级模块</div></div>
+<div class="kpi"><div class="v">13</div><div class="l">流程视图维度</div></div>
+<div class="kpi"><div class="v">6类</div><div class="l">管理要素体系</div></div>
+<div class="kpi"><div class="v">L0-L4</div><div class="l">分层分级架构</div></div>
+</div>
+
+<h3>核心价值主张</h3>
+<table>
+<tr><th style="width:140px">维度</th><th>价值描述</th></tr>
+<tr><td>结构化流程治理</td><td>用L0~L4分层分级架构树替代散落的Visio文件，让企业全部流程有"家"可归。支持多根节点管理多管理架构（如集团下多个子公司）</td></tr>
+<tr><td>要素联动管理</td><td>6类管理要素（角色、岗位、风险、术语、指标、控制措施）与流程节点深度绑定，改一处要素自动反映到所有关联流程</td></tr>
+<tr><td>文件自动生成</td><td>流程建模完成后，结构化信息自动同步至"文件内容"，发布后按模板生成存档文件，免去重复编写</td></tr>
+<tr><td>Visio存量迁移</td><td>支持vsdx格式Visio流程图快速导入，建立组件转换关系后可批量数字化迁移</td></tr>
+<tr><td>发布即宣贯</td><td>流程发布后自动向关联岗位人员推送消息提醒和学习任务，实现"发布即培训"</td></tr>
+<tr><td>版本可追溯</td><td>每次发布生成新版本，设计用户可查看历史版本，支持流程变更审计</td></tr>
+<tr><td>双端权限隔离</td><td>门户端面向最终用户（浏览查阅学习），工作台端面向管理员（设计创建治理），权限体系隔离</td></tr>
+<tr><td>业务自定义适配</td><td>业务模块管理支持流程图组件属性配置、活动属性模版自定义，企业可按自身业务特点灵活调整</td></tr>
+<tr><td>BPMA审批引擎</td><td>内置BPMA流程引擎，可视化设计审批流，支持启动/待办/监控/委托/流程类别配置，驱动文件发布审批闭环</td></tr>
+</table>
+
+<h3>平台双端架构</h3>
+<div class="note blue">平台采用"<strong>门户浏览 + 工作台管理</strong>"双端架构。门户端面向最终用户，侧重查阅与学习；工作台端面向管理员，侧重创建与治理。两端共享同一套数据，通过权限控制展现不同。</div>
+<table>
+<tr><th style="width:100px">维度</th><th>个人门户端</th><th>管理后台端（工作台）</th></tr>
+<tr><td>面向用户</td><td>全体员工（流程执行者）</td><td>流程管理员、编制员、审批人、系统管理员</td></tr>
+<tr><td>核心定位</td><td>浏览·查阅·学习·反馈</td><td>设计·创建·管理·治理</td></tr>
+<tr><td>一级模块</td><td>7个（我的主页、流程、制度、文件库、组织机构、管理要素、统计分析）</td><td>8个（我的工作台、流程建设、要素定义、文件编制、资料归档、监控运营、统计分析、系统设置）</td></tr>
+<tr><td>二级/三级模块</td><td>门户6类管理要素（风险/控制措施/术语/指标/角色）+ 13个流程视图 + 7个组织详情视图</td><td>系统设置6大二级模块：组织机构(3三级) / BPMA流程(7三级) / 门户管理 / 业务模块管理 / 绘图管理(2三级) / 规则规范(2三级) / 基础数据(6三级)</td></tr>
+<tr><td>关键操作</td><td>浏览流程架构树、查看个人参与流程、学习培训任务、收藏文档</td><td>新建架构/流程节点、流程图建模、要素维护、文件编制、发布审批、BPMA流程设计</td></tr>
+<tr><td>入口切换</td><td colspan="2" style="text-align:center">顶部"进入工作台"/"返回门户"按钮切换</td></tr>
+</table>
+</div>
+
+<!-- ========== 2. 用户角色 ========== -->
+<div class="section" id="roles">
+<h2>二、用户角色拆解</h2>
+<p>基于平台双端架构和功能模块分析，BPA平台涉及<strong>7类核心用户角色</strong>。角色之间通过权限体系隔离，部分用户可兼任多角色。</p>
+
+<div class="role-grid">
+
+<div class="role-card">
+<div class="icon">🏗️</div>
+<h4>流程架构师<span class="terminal both">双端</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Process Architect · 核心设计角色</p>
+<ul>
+<li>🛠️ 工作台→流程建设</li>
+<li>新建根节点/架构(L1-L3)/流程(L4)</li>
+<li>手工搭建或Excel批量导入</li>
+<li>架构设计7维度（架构图/视图/卡等）</li>
+<li>流程图建模（水平/垂直/阶段泳道）</li>
+<li>关联角色库+岗位库（双关联）</li>
+<li>Visio vsdx导入+自动编号</li>
+<li>关联6类要素（风险/指标/术语等）</li>
+<li>直接发布 / 审批发布</li>
+<li>👁️ 门户端查看历史版本</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">📝</div>
+<h4>体系文件编制员<span class="terminal">工作台</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Document Editor · 文档生产角色</p>
+<ul>
+<li>🛠️ 工作台→文件编制</li>
+<li>制度文件创建与编辑</li>
+<li>管理手册编制</li>
+<li>作业指导书编制</li>
+<li>规范/标准文件编制</li>
+<li>关联流程节点与要素</li>
+<li>提交发布审批</li>
+<li>查看"我的工作台→编制任务"</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">⚙️</div>
+<h4>要素管理员<span class="terminal">工作台</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Element Admin · 基础数据维护角色</p>
+<ul>
+<li>🛠️ 工作台→要素定义</li>
+<li>角色管理（角色定义/职责库/职责清单）</li>
+<li>风险管理（分类/等级/关联流程）</li>
+<li>控制措施维护（关联风险）</li>
+<li>术语管理</li>
+<li>指标管理（KPI）</li>
+<li>标准体系/活动库/流程表单</li>
+<li>🛠️ 系统设置→基础数据（6类要素库）</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">✅</div>
+<h4>审批人<span class="terminal">工作台</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Approver · 质量把关角色</p>
+<ul>
+<li>🛠️ 工作台→我的工作台→检核任务</li>
+<li>审批架构/流程发布申请</li>
+<li>审批文件编制发布</li>
+<li>审批通过后内容发布生效</li>
+<li>驳回并附审批意见</li>
+<li>查看任务记录与审批历史</li>
+<li>（可配置）流程委托</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">👤</div>
+<h4>普通员工/流程执行者<span class="terminal portal">门户</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">End User · 流程消费角色</p>
+<ul>
+<li>👁️ 门户→我的主页</li>
+<li>参与流程+工作职责自动归集</li>
+<li>待学习/已学习培训任务</li>
+<li>资产统计卡片（角色/风险/指标等）</li>
+<li>待办事项（我负责的/我拟制的）</li>
+<li>我的收藏/最近打开</li>
+<li>流程架构树（13个视图标签页）</li>
+<li>流程图绿色高亮本人环节</li>
+<li>双击活动/悬停查看关联要素</li>
+<li>导出预览/WORD/PDF</li>
+<li>制度/文件库/组织机构查阅</li>
+<li>6类管理要素浏览</li>
+<li>意见反馈</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">🔧</div>
+<h4>系统管理员<span class="terminal">工作台</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">System Admin · 平台运维角色</p>
+<ul>
+<li>🛠️ 工作台→系统设置</li>
+<li>组织机构（部门/岗位管理/岗位组管理）</li>
+<li>BPMA流程（启动/待办/查看/监控/类别/委托/设计）</li>
+<li>门户管理（页面布局配置）</li>
+<li>业务模块管理（自定义维度/属性）</li>
+<li>绘图管理（组件管理/元模型管理）</li>
+<li>规则规范（Visio组件定义/规则库）</li>
+<li>基础数据（角色/岗位/风险/术语/指标/控制措施）</li>
+<li>活动属性模版自定义</li>
+</ul>
+</div>
+
+<div class="role-card">
+<div class="icon">📊</div>
+<h4>监控运营人员<span class="terminal">工作台</span></h4>
+<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Ops Monitor · 运营保障角色</p>
+<ul>
+<li>🛠️ 工作台→监控运营</li>
+<li>监控中心（运行状态/异常告警）</li>
+<li>借阅中心（文件借阅审批）</li>
+<li>学习任务配置与下发</li>
+<li>人员岗位交接管理</li>
+<li>公告配置与发布</li>
+<li>消息中心→个人消息中心</li>
+<li>🛠️ 统计分析数据看板</li>
+<li>多维度分析（流程/文件/宣贯/运行/优化）</li>
+</ul>
+</div>
+
+</div>
+
+<h3>角色-模块权限矩阵</h3>
+<div class="table-wrap">
+<table>
+<tr><th>模块</th><th>架构师</th><th>编制员</th><th>要素管理员</th><th>审批人</th><th>普通员工</th><th>系统管理员</th><th>运营人员</th></tr>
+<tr><td>流程建设（设计）</td><td style="color:var(--accent3);font-weight:700">CRUD</td><td>R</td><td>R</td><td>R</td><td>R(门户)</td><td>配置</td><td>R</td></tr>
+<tr><td>要素定义</td><td>R</td><td>R</td><td style="color:var(--accent3);font-weight:700">CRUD</td><td>-</td><td>R(门户)</td><td>配置</td><td>-</td></tr>
+<tr><td>文件编制</td><td>关联</td><td style="color:var(--accent3);font-weight:700">CRUD</td><td>-</td><td>R</td><td>R(门户)</td><td>配置</td><td>-</td></tr>
+<tr><td>发布审批</td><td>提交</td><td>提交</td><td>-</td><td style="color:var(--accent3);font-weight:700">审批</td><td>-</td><td>配置流程</td><td>-</td></tr>
+<tr><td>监控运营</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>配置</td><td style="color:var(--accent3);font-weight:700">CRUD</td></tr>
+<tr><td>系统设置</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style="color:var(--accent3);font-weight:700">CRUD</td><td>-</td></tr>
+<tr><td>统计分析</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R(简化)</td><td>R</td><td style="color:var(--accent3);font-weight:700">R</td></tr>
+</table>
+</div>
+<p style="font-size:12px;color:var(--muted)">CRUD=增删改查 R=只读 配置=参数配置权限 - =无权限</p>
+
+</div>
+
+<!-- ========== SECTIONS TO BE APPENDED ========== -->
+<div id="append-point"></div>
+
+<!-- ========== 3. 使用场景 ========== -->
+<div class="section" id="scenarios">
+<h2>三、使用场景</h2>
+<p>以下是BPA平台在企业实际落地中<strong>7个典型使用场景</strong>，按业务价值从高到低排列。</p>
+
+<div class="scenario-card">
+<span class="num">1</span><h4>企业流程体系从0到1搭建</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：企业流程散落在各部门Visio文件、Word文档甚至个人电脑中，无统一管理，版本混乱，难以查找和追溯。</p>
+<p><strong>解法</strong>：流程架构师在工作台→流程建设，先新建根节点(L0，公司名)，再逐层新建架构(L1业务域→L2业务线→L3子流程域)，最后在L3下新建流程(L4)。每个流程通过泳道图建模，关联角色与岗位。可选择手工逐层搭建，或整理Excel模版批量导入。</p>
+<p><strong>产出</strong>：一套分层分级的流程架构树，覆盖企业全部业务，每个流程有编号、责任人、所属架构层级。</p>
+<div class="actors">参与角色：<span>流程架构师</span><span>系统管理员</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">2</span><h4>线下Visio流程图数字化迁移</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：企业已有大量Visio流程图文件，手工重绘成本极高，且容易遗漏细节。</p>
+<p><strong>解法</strong>：在流程设计界面点击"导入→Visio导入"，上传vsdx格式文件。系统自动解析流程图组件，对未识别组件需建立转换关系（在系统设置→规则/规范→Visio组件定义中预先配置）。导入后点击"自动编号"为活动生成编号，再补充角色关联、岗位关联和活动属性等结构化内容。</p>
+<p><strong>关键点</strong>：Visio流程图仅导入图形结构，线下无法结构化维护的活动属性、角色岗位关联需在系统中单独补充。</p>
+<div class="actors">参与角色：<span>流程架构师</span><span>系统管理员(配置组件)</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">3</span><h4>流程发布与全员宣贯培训</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：新流程发布后，相关员工不知情、不学习、不执行，流程制度形同虚设。</p>
+<p><strong>解法</strong>：流程设计时关联"客户体验"等岗位，发布后系统自动向关联岗位人员推送消息提醒，并自动下发"待学习"任务。员工在门户→我的主页→待学习中查看并完成学习。学习完成后状态自动变为"已学习"。流程图中员工的执行环节以绿色高亮标识，帮助快速定位自己的工作内容。</p>
+<p><strong>闭环</strong>：发布→消息推送→学习任务下发→员工学习→完成确认，全流程自动化。</p>
+<div class="actors">参与角色：<span>流程架构师</span><span>普通员工</span><span>监控运营人员</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">4</span><h4>流程版本迭代与变更管理</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：流程变更后旧版本丢失，无法追溯历史，难以审计变更内容。</p>
+<p><strong>解法</strong>：每次流程发布生成新版本，设计用户可在流程查看页面切换查看所有历史版本，普通用户仅看到最新版本。架构/流程的属性修改、要素关联变更都随发布记录留痕。通过"审批发布"模式，变更需经审批人确认后方可生效，确保变更质量。</p>
+<div class="actors">参与角色：<span>流程架构师</span><span>审批人</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">5</span><h4>组织架构调整后的流程交接</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：人员离职或岗位调整时，其负责的流程环节无人接手，流程执行断裂。</p>
+<p><strong>解法</strong>：监控运营人员在工作台→监控运营→人员岗位交接中发起交接流程，选择交接人和被交接人，系统自动将该人员负责的所有流程环节转移到新岗位人员名下，并更新门户端"参与流程"中的工作职责归集。</p>
+<div class="actors">参与角色：<span>监控运营人员</span><span>普通员工</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">6</span><h4>体系文件编制与发布审批</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：制度文件、管理手册、作业指导书分散在各部门，编制、审批、发布流程不规范。</p>
+<p><strong>解法</strong>：编制员在工作台→文件编制中选择文件类型（制度/手册/指导书/规范标准），创建文件并编辑内容，关联对应流程节点。完成后提交发布审批，审批人在"我的工作台→检核任务"中审批。通过后文件发布生效，自动归档至资料归档→文件库。已作废文件进入"作废库"保留历史。</p>
+<div class="actors">参与角色：<span>体系文件编制员</span><span>审批人</span></div>
+</div>
+
+<div class="scenario-card">
+<span class="num">7</span><h4>流程运行监控与数据分析</h4>
+<p style="margin-top:8px"><strong>痛点</strong>：流程发布后无法掌握运行状态，不知哪些流程被执行、哪些需优化。</p>
+<p><strong>解法</strong>：监控运营人员在监控中心查看运行状态和异常告警，处理超时流程。在统计分析模块按流程体系、文件体系、流程宣贯、流程运行、流程优化等维度查看统计图表，支持按组织筛选和切换分类标签。导出分析报告支撑流程优化决策。</p>
+<div class="actors">参与角色：<span>监控运营人员</span><span>流程架构师</span></div>
+</div>
+
+</div>
+
+<!-- ========== 4. 业务流程 ========== -->
+<div class="section" id="flows">
+<h2>四、业务流程</h2>
+<p>以下展示BPA平台<strong>端到端核心业务流程</strong>，覆盖从要素准备到持续优化的完整闭环。</p>
+
+<h3>4.1 端到端流程闭环总览</h3>
+<div class="mermaid">
+<pre class="mermaid">
+flowchart LR
+    A[要素准备<br/>角色/风险/术语/指标] --> B[架构搭建<br/>L0根节点→L1-L3架构→L4流程]
+    B --> C[流程设计<br/>泳道图建模+要素关联]
+    C --> D[文件编制<br/>制度/手册/指导书]
+    D --> E[审批发布<br/>审批人检核→发布生效]
+    E --> F[宣贯培训<br/>消息推送+学习任务]
+    F --> G[监控运营<br/>运行监控+数据分析]
+    G --> H[优化迭代<br/>版本更新+持续改进]
+    H -.-> C
+
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#fce4ec,stroke:#c62828
+    style C fill:#fce4ec,stroke:#c62828
+    style D fill:#fff3e0,stroke:#f57f17
+    style E fill:#fff3e0,stroke:#f57f17
+    style F fill:#e8f5e9,stroke:#2e7d32
+    style G fill:#e8f5e9,stroke:#2e7d32
+    style H fill:#f3e5f5,stroke:#7b1fa2
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图1：BPA端到端流程闭环（蓝色=要素准备，红色=核心设计，橙色=审批发布，绿色=运营宣贯，紫色=优化迭代）</p>
+
+<h3>4.2 流程设计核心流程（时序图）</h3>
+<div class="mermaid">
+<pre class="mermaid">
+sequenceDiagram
+    participant 架构师
+    participant 系统平台
+    participant 要素库
+    participant 审批人
+    participant 关联岗位人员
+
+    架构师->>系统平台: 进入流程建设→选中流程节点
+    架构师->>系统平台: 点击"流程设计"→全屏绘制
+    架构师->>系统平台: 拖拽泳道图(水平/垂直/阶段)
+    架构师->>要素库: 双击泳道→选择角色
+    架构师->>要素库: 双击泳道→关联岗位(客户体验岗)
+    架构师->>系统平台: 拖拽起始/活动/决策组件
+    loop 每个活动组件
+        架构师->>系统平台: 双击活动→设计属性
+        架构师->>要素库: 关联文件/术语/风险/指标
+    end
+    架构师->>系统平台: (可选)Visio导入+自动编号
+    架构师->>系统平台: 维护基本属性(必填项)
+    架构师->>系统平台: 检查文件内容(自动同步)
+    架构师->>系统平台: 选择"审批发布"
+    系统-->>审批人: 推送检核任务
+    审批人->>系统平台: 审批通过
+    系统-->>关联岗位人员: 推送消息提醒
+    系统-->>关联岗位人员: 下发学习任务(待学习)
+    系统-->>系统平台: 自动生成存档文件
+    系统-->>系统平台: 工作职责归集到门户
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图2：流程设计完整时序流程</p>
+
+<h3>4.3 关键流程节点详解</h3>
+<div class="table-wrap">
+<table>
+<tr><th style="width:40px">#</th><th style="width:120px">流程节点</th><th style="width:100px">负责角色</th><th style="width:120px">输入</th><th style="width:120px">输出</th><th>关键动作</th></tr>
+<tr><td>1</td><td>要素准备</td><td>要素管理员</td><td>业务调研结果</td><td>要素库数据</td><td>创建角色、风险、术语、指标、控制措施等基础要素</td></tr>
+<tr><td>2</td><td>架构搭建</td><td>流程架构师</td><td>要素库+企业业务框架</td><td>L0-L4架构树</td><td>新建根节点→架构→流程，手工或Excel批量导入</td></tr>
+<tr><td>3</td><td>架构设计</td><td>流程架构师</td><td>架构树节点</td><td>架构图/架构视图</td><td>拖拽绘制架构图(一级子节点)和架构视图(业务全景图)</td></tr>
+<tr><td>4</td><td>流程设计</td><td>流程架构师</td><td>流程节点+要素库</td><td>流程图+属性</td><td>泳道图建模、关联角色岗位、设计活动属性、关联要素</td></tr>
+<tr><td>5</td><td>文件编制</td><td>编制员</td><td>流程节点</td><td>体系文件</td><td>编制制度/手册/指导书/规范标准，关联流程</td></tr>
+<tr><td>6</td><td>审批发布</td><td>审批人</td><td>发布申请</td><td>发布生效</td><td>检核任务审批，通过后内容发布生效</td></tr>
+<tr><td>7</td><td>文件生成</td><td>系统自动</td><td>建模数据</td><td>存档文件</td><td>结构化信息按模板自动生成存档文件</td></tr>
+<tr><td>8</td><td>宣贯培训</td><td>系统+员工</td><td>发布事件</td><td>学习记录</td><td>自动推送消息+学习任务，员工完成学习</td></tr>
+<tr><td>9</td><td>运行监控</td><td>运营人员</td><td>运行数据</td><td>监控报告</td><td>监控运行状态，处理异常，统计数据分析</td></tr>
+<tr><td>10</td><td>优化迭代</td><td>架构师</td><td>监控反馈</td><td>新版本</td><td>修改流程设计，重新发布生成新版本</td></tr>
+</table>
+</div>
+
+<h3>4.4 BPMA审批流引擎流程</h3>
+<p>BPMA是BPA内置的流程引擎，用于驱动文件发布审批、流程发布审批等审批场景，与BPA的流程架构设计独立但联动。</p>
+<div class="mermaid">
+<pre class="mermaid">
+flowchart TD
+    A[系统管理员] -->|设计审批流| B[BPMA流程设计器<br/>拖拽节点画布]
+    B --> C[配置审批节点<br/>审批人/条件/规则]
+    C --> D[保存发布审批流]
+    D --> E[架构师/编制员<br/>提交发布申请]
+    E --> F[启动流程实例]
+    F --> G{审批节点}
+    G -->|通过| H[下一节点]
+    G -->|驳回| I[退回提交人]
+    H --> J{是否最后节点}
+    J -->|否| G
+    J -->|是| K[发布生效]
+    I --> L[修改后重新提交]
+    L --> F
+    K --> M[自动推送消息+学习任务]
+
+    style B fill:#e3f2fd,stroke:#1565c0
+    style K fill:#e8f5e9,stroke:#2e7d32
+    style M fill:#e8f5e9,stroke:#2e7d32
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图3：BPMA审批流引擎工作流程</p>
+
+</div>
+
+<!-- ========== 5. 业务架构 ========== -->
+<div class="section" id="architecture">
+<h2>五、业务架构</h2>
+
+<h3>5.1 三层业务架构模型</h3>
+<p>BPA平台的业务架构可拆解为<strong>数据层、设计层、运营层</strong>三层模型，自底向上支撑完整业务闭环。</p>
+<div class="mermaid">
+<pre class="mermaid">
+flowchart TB
+    subgraph 运营层["运营层（消费与治理）"]
+        F1[门户浏览]
+        F2[宣贯学习]
+        F3[运行监控]
+        F4[统计分析]
+        F5[资料归档]
+    end
+    subgraph 设计层["设计层（创建与管理）"]
+        D1[流程建设<br/>架构树+流程设计]
+        D2[要素定义<br/>角色/风险/术语/指标]
+        D3[文件编制<br/>制度/手册/指导书]
+        D4[BPMA流程<br/>审批流设计]
+    end
+    subgraph 数据层["数据层（基础要素库）"]
+        E1[角色库]
+        E2[岗位库]
+        E3[风险库]
+        E4[术语库]
+        E5[指标库]
+        E6[控制措施库]
+        E7[知识库/文件库]
+        E8[组织机构数据]
+    end
+    数据层 --> 设计层
+    设计层 --> 运营层
+    运营层 -.反馈.-> 设计层
+
+    style 数据层 fill:#e3f2fd,stroke:#1565c0
+    style 设计层 fill:#fce4ec,stroke:#c62828
+    style 运营层 fill:#e8f5e9,stroke:#2e7d32
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图4：BPA三层业务架构模型</p>
+
+<h3>5.2 核心数据流转关系</h3>
+<p>BPA最核心的数据流转在于"<strong>要素→架构→流程→文件→发布→宣贯</strong>"的链路，以及各环节之间的双向关联关系。</p>
+<div class="mermaid">
+<pre class="mermaid">
+flowchart LR
+    subgraph 数据源
+        ES[要素库<br/>6类管理要素]
+        ORG[组织机构<br/>部门/岗位]
+        KB[知识库<br/>文件库]
+    end
+
+    subgraph 设计产物
+        ARCH[架构树<br/>L0-L4分层]
+        FLOW[流程图<br/>泳道+组件]
+        DOC[体系文件<br/>制度/手册]
+    end
+
+    subgraph 发布产物
+        VER[版本记录]
+        ARCH_FILE[存档文件<br/>自动生成]
+        MSG[消息+学习任务]
+    end
+
+    ES -->|关联| ARCH
+    ES -->|关联| FLOW
+    ORG -->|责任人/岗位| ARCH
+    ORG -->|岗位关联| FLOW
+    KB -->|关联文件| ARCH
+    KB -->|关联文件| FLOW
+
+    ARCH --> FLOW
+    FLOW --> DOC
+    FLOW -->|发布| VER
+    FLOW -->|建模数据同步| ARCH_FILE
+    VER -->|触发| MSG
+    MSG -->|推送至| ORG
+
+    style ES fill:#e3f2fd
+    style ORG fill:#e3f2fd
+    style KB fill:#e3f2fd
+    style ARCH fill:#fce4ec
+    style FLOW fill:#fce4ec
+    style DOC fill:#fff3e0
+    style VER fill:#e8f5e9
+    style ARCH_FILE fill:#e8f5e9
+    style MSG fill:#e8f5e9
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图5：核心数据流转关系图</p>
+
+<h3>5.3 模块功能分层视图</h3>
+<div class="table-wrap">
+<table>
+<tr><th style="width:80px">层级</th><th style="width:120px">模块</th><th>核心职责</th><th style="width:100px">数据流向</th></tr>
+<tr><td rowspan="5" style="color:var(--accent3);font-weight:700">运营层</td><td>门户浏览</td><td>架构树浏览、流程查看（13视图）、制度文件查阅、组织机构查询、6类管理要素浏览</td><td>← 设计层</td></tr>
+<tr><td>宣贯学习</td><td>学习任务下发、消息推送、待学习/已学习管理、绿色高亮本人环节</td><td>← 发布事件</td></tr>
+<tr><td>监控运营</td><td>监控中心、借阅中心、学习任务配置、人员岗位交接、公告配置、消息中心</td><td>← 运行数据</td></tr>
+<tr><td>统计分析</td><td>流程体系/文件体系/宣贯/运行/优化五维度分析</td><td>← 全量数据</td></tr>
+<tr><td>资料归档</td><td>文件库归档存储、作废库管理</td><td>← 文件编制</td></tr>
+<tr><td rowspan="4" style="color:var(--accent);font-weight:700">设计层</td><td>流程建设</td><td>架构树搭建（手工/Excel）、架构设计7维度、流程图建模（3种泳道）、Visio导入、发布管理</td><td>← 数据层<br/>→ 运营层</td></tr>
+<tr><td>要素定义</td><td>角色管理（3级子菜单）、风险/控制/术语/指标、标准体系/活动库/流程表单</td><td>→ 流程建设</td></tr>
+<tr><td>文件编制</td><td>制度/管理手册/指导书/规范标准编制与审批</td><td>→ 资料归档</td></tr>
+<tr><td>BPMA流程</td><td>启动/待办/查看/监控/类别/委托/设计（7个三级模块）</td><td>→ 审批驱动</td></tr>
+<tr><td rowspan="4" style="color:var(--accent2);font-weight:700">数据层</td><td>基础要素库</td><td>角色库、岗位库、风险库、术语库、指标库、控制措施库（6类）</td><td>→ 设计层</td></tr>
+<tr><td>组织机构</td><td>部门、岗位管理、岗位组管理（3个三级模块）</td><td>→ 设计层</td></tr>
+<tr><td>知识库</td><td>文件库主页、团队知识库、分享知识、收藏、知识分类、回收站</td><td>→ 设计层</td></tr>
+<tr><td>系统配置</td><td>门户管理、业务模块管理、绘图管理（组件/元模型）、规则规范（Visio组件/规则库）</td><td>→ 平台支撑</td></tr>
+</table>
+</div>
+
+<h3>5.4 角色-岗位双关联机制（核心设计）</h3>
+<div class="note">BPA平台最精妙的设计之一是<strong>角色与岗位的双关联机制</strong>。角色从业务角度定义流程执行者，岗位从组织角度定义具体人员位置。两者分别关联到流程泳道，实现"业务逻辑"与"组织映射"的解耦。</div>
+<div class="mermaid">
+<pre class="mermaid">
+flowchart LR
+    subgraph 业务视角
+        ROLE[角色 Role<br/>服务于业务<br/>如：申请人、审批人、复核人]
+    end
+    subgraph 组织视角
+        POS[岗位 Position<br/>服务于组织<br/>如：客户体验岗、财务专员岗]
+    end
+    subgraph 流程设计
+        LANE[泳道 Lane]
+        ACT[活动 Activity]
+    end
+    subgraph 人员
+        USER[具体员工<br/>如：张三]
+    end
+
+    ROLE -->|双击泳道关联| LANE
+    POS -->|双击泳道关联| LANE
+    LANE --> ACT
+    POS -->|岗位映射| USER
+    USER -->|消息推送| MSG[消息提醒+学习任务]
+    USER -->|绿色高亮| HIGHLIGHT[流程图高亮本人环节]
+
+    style ROLE fill:#e3f2fd
+    style POS fill:#e8f5e9
+    style LANE fill:#fce4ec
+    style USER fill:#fff3e0
+</pre>
+</div>
+<p style="font-size:13px;color:var(--muted);text-align:center">图6：角色-岗位双关联机制</p>
+<table>
+<tr><th>维度</th><th>角色（Role）</th><th>岗位（Position）</th></tr>
+<tr><td>定义来源</td><td>业务流程角度梳理</td><td>人事组织管理角度定义</td></tr>
+<tr><td>服务对象</td><td>服务于业务（流程设计）</td><td>服务于组织（人员管理）</td></tr>
+<tr><td>变更频率</td><td>低（业务逻辑稳定）</td><td>高（人员变动频繁）</td></tr>
+<tr><td>关联方式</td><td>双击泳道→角色库选择</td><td>双击泳道→岗位库选择</td></tr>
+<tr><td>消息推送</td><td>不直接推送</td><td>关联岗位人员→推送消息+学习任务</td></tr>
+<tr><td>流程图高亮</td><td>不高亮</td><td>关联员工登录→绿色高亮本人环节</td></tr>
+</table>
+
+<h3>5.5 完整模块矩阵（三级菜单展开）</h3>
+<p>基于深度探索，以下为BPA平台<strong>门户端+工作台端全部一级/二级/三级模块</strong>的完整矩阵。</p>
+
+<h4 style="color:var(--accent2);margin-top:20px">🔵 门户端（7个一级模块）</h4>
+
+<div class="role-grid">
+
+<div class="role-card">
+<h4>① 我的主页</h4>
+<ul>
+<li><strong>参与流程</strong>：展示担任角色、工作职责、岗位</li>
+<li><strong>待学习/已学习</strong>：培训任务，含类型、岗位、时限</li>
+<li><strong>角色统计卡片</strong>：角色数/风险数/指标数/术语数/条款数</li>
+<li><strong>待办事项</strong>：我负责的/我拟制的</li>
+<li><strong>资产统计</strong>：架构/流程/制度/指导书/规范标准/管理手册</li>
+<li><strong>我的收藏/最近打开</strong>：收藏和最近打开的流程/文件</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>② 流程（核心模块）</h4>
+<ul>
+<li><strong>架构树</strong>：L1-L2架构分类节点 + L3-L4流程节点</li>
+<li><strong>流程视图（13标签页）</strong>：架构卡/键盘图/架构图/架构视图/相关管理手册/文件/规范标准/指导书/制度/术语/风险/指标/说明</li>
+<li><strong>工具栏</strong>：导出/意见反馈</li>
+<li><strong>流程查看</strong>：版本管理/工作职责归集/消息提醒/绿色高亮/活动查看/导出三格式</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>③ 制度</h4>
+<ul>
+<li><strong>体系文件制度</strong>：制度分类树/制度列表</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>④ 文件库</h4>
+<ul>
+<li><strong>文件库主页</strong>：概览首页</li>
+<li><strong>团队知识库</strong>：共享文档</li>
+<li><strong>分享的知识</strong>：他人分享文档</li>
+<li><strong>收藏</strong>：个人收藏文档</li>
+<li><strong>知识分类</strong>：按分类浏览</li>
+<li><strong>回收站</strong>：已删文档恢复</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑤ 组织机构</h4>
+<ul>
+<li><strong>组织架构树</strong>：集团→部门节点</li>
+<li><strong>组织详情（7标签页）</strong>：基础信息/责任架构/责任流程/责任管理手册/责任规范标准/责任指导书/责任制度</li>
+<li><strong>工具栏</strong>：清单导出/流程宣贯</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑥ 管理要素</h4>
+<ul>
+<li><strong>风险</strong>：风险分类树+列表</li>
+<li><strong>控制措施</strong>：分类树+列表</li>
+<li><strong>术语</strong>：分类树+列表</li>
+<li><strong>指标</strong>：分类树+列表</li>
+<li><strong>角色</strong>：分类树+列表</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑦ 统计分析</h4>
+<ul>
+<li><strong>统计概览</strong>：6个关键指标卡片</li>
+<li><strong>流程体系分析</strong>：流程分布图表</li>
+<li><strong>文件体系分析</strong>：多分类标签页</li>
+<li><strong>流程宣贯分析</strong>：宣贯执行统计</li>
+<li><strong>流程运行/优化分析</strong>：运行状态统计</li>
+</ul>
+</div>
+
+</div>
+
+<h4 style="color:var(--accent);margin-top:24px">🔴 工作台端（8个一级模块）</h4>
+
+<div class="role-grid">
+
+<div class="role-card">
+<h4>① 我的工作台</h4>
+<ul>
+<li><strong>资产统计</strong>：架构/流程/制度/指导书/规范标准/管理手册</li>
+<li><strong>编制任务</strong>：任务类型/文件类型/到达时间/超时提醒</li>
+<li><strong>检核任务</strong>：待检核任务列表</li>
+<li><strong>成熟度评估</strong>：流程体系成熟度评估</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>② 流程建设（核心）</h4>
+<ul>
+<li><strong>新建节点</strong>：根节点/架构(L1-L3)/流程(L4)</li>
+<li><strong>搭建方式</strong>：手工搭建/Excel批量导入</li>
+<li><strong>架构设计（7维度）</strong>：架构图/架构视图/架构卡/相关管理手册/规范标准/指导书/制度/术语/风险/指标/文件/说明</li>
+<li><strong>发布机制</strong>：直接发布/审批发布</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>②.1 流程设计</h4>
+<ul>
+<li><strong>流程图建模</strong>：全屏/泳道图(水平/垂直/阶段)/建模组件/活动属性/角色关联/岗位关联</li>
+<li><strong>Visio导入</strong>：vsdx导入/自动编号/补充内容/多格式</li>
+<li><strong>流程内容设计</strong>：基本属性/文件内容(自动生成)/相关要素</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>③ 要素定义</h4>
+<ul>
+<li><strong>角色管理</strong>：角色定义/角色职责库/角色职责清单</li>
+<li><strong>风险管理</strong>：分类/等级/关联流程</li>
+<li><strong>控制措施</strong>：关联风险</li>
+<li><strong>术语管理</strong>：专业术语维护</li>
+<li><strong>指标管理</strong>：KPI指标维护</li>
+<li><strong>标准体系/活动库/流程表单</strong></li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>④ 文件编制</h4>
+<ul>
+<li><strong>制度管理</strong>：创建/编辑/发布/版本控制</li>
+<li><strong>管理手册</strong>：编制与管理</li>
+<li><strong>指导书</strong>：作业指导书编制</li>
+<li><strong>规范/标准</strong>：规范标准编制</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑤ 资料归档</h4>
+<ul>
+<li><strong>文件库</strong>：已发布文件归档存储</li>
+<li><strong>作废库</strong>：已作废文件保留历史</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑥ 监控运营</h4>
+<ul>
+<li><strong>监控中心</strong>：运行状态/异常告警</li>
+<li><strong>借阅中心</strong>：文件借阅审批</li>
+<li><strong>学习任务配置</strong>：学习任务下发</li>
+<li><strong>人员岗位交接</strong>：交接流程管理</li>
+<li><strong>公告配置</strong>：公告发布管理</li>
+<li><strong>消息中心</strong>：个人消息中心</li>
+</ul>
+</div>
+
+<div class="role-card">
+<h4>⑦ 统计分析</h4>
+<ul>
+<li><strong>多维度数据分析</strong>：流程体系/文件体系/宣贯/运行/优化</li>
+</ul>
+</div>
+
+<div class="role-card" style="grid-column:1/-1">
+<h4>⑧ 系统设置（6个二级模块，20个三级模块）</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:8px">
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">组织机构</strong><br>
+<span style="font-size:12px;color:var(--muted)">部门 / 岗位管理 / 岗位组管理</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">BPMA流程</strong><br>
+<span style="font-size:12px;color:var(--muted)">启动流程 / 待办流程 / 流程查看 / 流程监控 / 流程类别 / 流程委托 / 流程设计</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">门户管理</strong><br>
+<span style="font-size:12px;color:var(--muted)">门户页面配置</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">业务模块管理</strong><br>
+<span style="font-size:12px;color:var(--muted)">业务模块自定义配置</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">绘图管理</strong><br>
+<span style="font-size:12px;color:var(--muted)">绘图组件管理 / 元模型管理</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px">
+<strong style="color:var(--accent)">规则/规范</strong><br>
+<span style="font-size:12px;color:var(--muted)">Visio组件定义 / 规则库</span>
+</div>
+<div style="border:1px dashed var(--rule);padding:10px;border-radius:6px;grid-column:1/-1">
+<strong style="color:var(--accent)">基础数据（6类要素库）</strong><br>
+<span style="font-size:12px;color:var(--muted)">角色 / 岗位 / 风险 / 术语 / 指标 / 控制措施</span>
+</div>
+</div>
+</div>
+
+</div>
+
+<p style="font-size:12px;color:var(--muted);margin-top:12px">注：门户端7个一级模块 + 工作台端8个一级模块 = 15个一级模块，二/三级模块合计80+</p>
+
+</div>
+
+<!-- ========== 6. 技术卡点 ========== -->
+<div class="section" id="tech">
+<h2>六、技术卡点</h2>
+<p>基于对平台的实际操作探索和操作手册分析，梳理出以下<strong>8个核心技术卡点</strong>，按影响程度分级。</p>
+
+<div class="tech-card">
+<span class="level high">高</span>
+<h4>1. 前端架构：iframe嵌套导致状态隔离</h4>
+<p>平台采用Vue+ElementUI构建SPA应用，但<strong>门户端与工作台端通过iframe嵌套</strong>切换，部分功能页面（如流程模块）在iframe内独立运行。这导致：跨iframe通信需postMessage、全局状态（如用户信息）需在多实例同步、URL路由fragment在iframe内外不同步（门户用<code>#/login</code>，工作台用独立路由）。</p>
+<div class="impact"><strong>影响</strong>：用户体验割裂、浏览器前进后退行为不一致、SEO不可用、移动端适配困难</div>
+</div>
+
+<div class="tech-card">
+<span class="level high">高</span>
+<h4>2. 流程图画布：Canvas渲染无法被自动化捕获</h4>
+<p>键盘图、架构图、流程图建模均采用<strong>Canvas渲染</strong>（非SVG/DOM），accessibility tree无法捕获画布内容。实际探索中发现：snapshot只能获取画布容器div，内部节点（泳道、活动组件）对自动化工具不可见。这意味着：自动化测试需依赖坐标点击、无障碍访问不可用、无法通过DOM操作画布元素。</p>
+<div class="impact"><strong>影响</strong>：自动化测试成本高、无障碍合规风险、截图对比是唯一验证手段</div>
+</div>
+
+<div class="tech-card">
+<span class="level high">高</span>
+<h4>3. Visio导入解析：vsdx格式解析+组件转换映射</h4>
+<p>Visio流程图导入涉及<strong>vsdx（Office Open XML）格式解析</strong>，需将Visio的Shape转换为BPA的流程建模组件。系统对未识别组件需手工建立转换关系（存储在系统设置→规则/规范→Visio组件定义）。痛点在于：Visio组件类型多样（自定义Shape、容器、连接线），转换关系维护成本高；导入后活动编号缺失需"自动编号"补全；图形可导入但活动属性、角色岗位等结构化内容无法从Visio提取，需手工补充。</p>
+<div class="impact"><strong>影响</strong>：存量迁移效率低、组件转换关系需持续维护、导入后仍需大量手工补充</div>
+</div>
+
+<div class="tech-card">
+<span class="level mid">中</span>
+<h4>4. 权限体系：双端权限+功能权限+数据权限三层叠加</h4>
+<p>平台权限体系复杂：<strong>第一层</strong>门户端/工作台端访问权限（顶部"进入工作台"按钮仅对特定角色可见）；<strong>第二层</strong>功能模块权限（7类角色×15个模块的CRUD矩阵）；<strong>第三层</strong>数据权限（多根节点架构独立管理、组织架构数据范围控制、统计分析按组织筛选）。三层叠加导致权限配置和调试复杂度高，试用账号（TY0177）因权限配置导致统计分析数据为0、部分管理功能不可见。</p>
+<div class="impact"><strong>影响</strong>：权限配置复杂、新用户上手成本高、权限问题排查困难</div>
+</div>
+
+<div class="tech-card">
+<span class="level mid">中</span>
+<h4>5. 文件自动生成：模板引擎+结构化数据抓取</h4>
+<p>流程发布后系统<strong>自动抓取建模数据按模板生成存档文件</strong>。技术挑战在于：流程图建模数据（活动属性、角色岗位、关联要素）需结构化为可填充模板的数据模型；不同文件类型（制度/手册/指导书）模板各异；模板需支持自定义（业务模块管理）；生成的文件需保持格式一致且可编辑。模板引擎的灵活性与生成文件的准确性存在trade-off。</p>
+<div class="impact"><strong>影响</strong>：模板定制成本高、生成文件格式一致性保障难、自定义模板质量依赖实施</div>
+</div>
+
+<div class="tech-card">
+<span class="level mid">中</span>
+<h4>6. Excel批量导入：模版校验与数据完整性</h4>
+<p>Excel批量导入架构和流程需<strong>两个模版分开导入</strong>（先架构后流程），模版从第三行起录入，责任人/部门需系统已有数据。痛点：导入数据校验依赖前置数据完整性（若组织机构未录入，责任人字段导入失败）；架构与流程分两次导入，中间状态不一致；大量数据导入时性能与错误提示不够友好；模版格式约束弱（Excel单元格级别）。</p>
+<div class="impact"><strong>影响</strong>：导入失败原因定位困难、需先完成组织机构等基础数据、大规模导入体验待优化</div>
+</div>
+
+<div class="tech-card">
+<span class="level low">低</span>
+<h4>7. 多根节点架构：数据隔离与跨架构查询</h4>
+<p>平台支持<strong>新建多流程架构根节点</strong>，每个根节点下架构与流程独立管理维护（应对多管理架构情况，如集团下多个子公司）。但这也带来：跨根节点的统计分析需合并查询、全局搜索需覆盖多根节点、根节点间数据引用（如共用角色/术语）需跨域关联。</p>
+<div class="impact"><strong>影响</strong>：跨组织分析需特殊处理、全局搜索范围需明确、多根节点管理复杂度上升</div>
+</div>
+
+<div class="tech-card">
+<span class="level low">低</span>
+<h4>8. 业务模块自定义配置：灵活性与稳定性平衡</h4>
+<p>BPA的设计内容可结合企业实际需要增减（业务模块管理），包括流程图组件属性配置、活动属性模版自定义。自定义能力强但也意味着：标准功能被修改后回归测试覆盖难、版本升级时自定义配置的兼容性保障、不同企业配置差异导致技术支持成本高。</p>
+<div class="impact"><strong>影响</strong>：实施周期长、标准化测试覆盖难、版本升级兼容性风险</div>
+</div>
+
+<h3>技术卡点优先级矩阵</h3>
+<div class="table-wrap">
+<table>
+<tr><th>卡点</th><th style="width:80px">影响程度</th><th style="width:80px">解决难度</th><th style="width:100px">优先级</th><th>建议方向</th></tr>
+<tr><td>iframe嵌套状态隔离</td><td style="color:#d32f2f">高</td><td style="color:#d32f2f">高</td><td style="color:var(--warn)">P1</td><td>逐步迁移到单SPA+微前端，消除iframe</td></tr>
+<tr><td>Canvas画布不可捕获</td><td style="color:#d32f2f">高</td><td style="color:var(--warn)">中</td><td style="color:var(--warn)">P1</td><td>评估迁移到SVG/DOM渲染的可行性</td></tr>
+<tr><td>Visio导入解析</td><td style="color:#d32f2f">高</td><td style="color:#d32f2f">高</td><td style="color:var(--warn)">P1</td><td>扩充组件转换库、引入AI辅助组件识别</td></tr>
+<tr><td>权限体系三层叠加</td><td style="color:var(--warn)">中</td><td style="color:var(--warn)">中</td><td style="color:var(--accent2)">P2</td><td>引入RBAC+ABAC混合模型、权限可视化</td></tr>
+<tr><td>文件自动生成</td><td style="color:var(--warn)">中</td><td style="color:var(--warn)">中</td><td style="color:var(--accent2)">P2</td><td>模板版本管理、预览校验机制</td></tr>
+<tr><td>Excel批量导入</td><td style="color:var(--warn)">中</td><td style="color:var(--accent3)">低</td><td style="color:var(--accent3)">P3</td><td>增强校验提示、支持在线预校验</td></tr>
+<tr><td>多根节点架构</td><td style="color:var(--accent3)">低</td><td style="color:var(--accent3)">低</td><td style="color:var(--accent3)">P3</td><td>跨根节点查询优化</td></tr>
+<tr><td>业务模块自定义</td><td style="color:var(--accent3)">低</td><td style="color:var(--warn)">中</td><td style="color:var(--accent3)">P3</td><td>建立配置基线、自动化回归测试</td></tr>
+</table>
+</div>
+
+</div>
+
+<!-- ========== 7. 后续优化方向 ========== -->
+<div class="section" id="roadmap">
+<h2>七、后续优化方向</h2>
+<p>基于技术卡点分析和行业趋势，梳理BPA平台<strong>6大优化方向</strong>，分为短期、中期、长期三个阶段。</p>
+
+<h3>7.1 短期优化（3-6个月）</h3>
+<div class="tech-card" style="border-left-color:var(--accent3)">
+<h4 style="color:var(--accent3)">① 移动端适配与响应式改造</h4>
+<p><strong>现状</strong>：平台为PC端设计，移动端完全不可用（table最小宽度900px，iframe嵌套在小屏断裂）。</p>
+<p><strong>方向</strong>：优先适配门户端核心功能（流程浏览、学习任务、消息通知），采用响应式布局+抽屉式导航。工作台端因设计操作密集，维持PC端。</p>
+<p><strong>价值</strong>：让一线员工在手机上完成流程学习和消息接收，提升宣贯覆盖率。</p>
+</div>
+
+<div class="tech-card" style="border-left-color:var(--accent3)">
+<h4 style="color:var(--accent3)">② Excel导入体验增强</h4>
+<p><strong>现状</strong>：导入校验提示不友好，失败原因定位困难，需先完成组织机构等前置数据。</p>
+<p><strong>方向</strong>：增加导入前在线预校验（上传后先检查再确认导入）、逐行错误提示（标注具体行号和字段）、前置数据缺失预警（导入前检查责任人/部门是否存在）、导入进度条和结果报告。</p>
+<p><strong>价值</strong>：降低实施门槛，减少导入失败导致的重复工作。</p>
+</div>
+
+<div class="tech-card" style="border-left-color:var(--accent3)">
+<h4 style="color:var(--accent3)">③ 权限可视化与自助配置</h4>
+<p><strong>现状</strong>：三层权限叠加，配置和调试复杂度高。</p>
+<p><strong>方向</strong>：提供权限矩阵可视化看板（角色×模块×操作）、权限模拟器（以某用户视角预览可见功能）、权限变更影响分析（修改某权限后受影响用户列表）。</p>
+<p><strong>价值</strong>：降低权限管理门槛，减少权限配置错误。</p>
+</div>
+
+<h3>7.2 中期优化（6-12个月）</h3>
+<div class="tech-card" style="border-left-color:var(--warn)">
+<h4 style="color:var(--warn)">④ AI辅助流程建模</h4>
+<p><strong>现状</strong>：流程图建模完全依赖手工拖拽，效率低、学习曲线陡。</p>
+<p><strong>方向</strong>：引入AI辅助能力——自然语言描述生成流程草图（输入"采购审批流程"自动生成泳道+活动节点）、流程图智能校验（检查缺失环节、角色岗位遗漏）、基于已有流程推荐相似流程模板、Visio导入时AI识别组件类型并自动映射。</p>
+<p><strong>价值</strong>：将流程设计效率提升3-5倍，降低架构师门槛。</p>
+</div>
+
+<div class="tech-card" style="border-left-color:var(--warn)">
+<h4 style="color:var(--warn)">⑤ 流程仿真与执行监控</h4>
+<p><strong>现状</strong>：流程发布后仅能监控运行状态，无法预演流程执行路径。</p>
+<p><strong>方向</strong>：增加流程仿真引擎——流程发布前模拟执行（输入测试数据，预览流程流转路径和耗时）、流程瓶颈分析（识别耗时最长的活动节点）、流程执行率统计（各环节实际执行次数vs设计次数）、与ERP/OA系统集成获取真实执行数据。</p>
+<p><strong>价值</strong>：从"流程设计"升级到"流程运营"，支撑持续优化。</p>
+</div>
+
+<div class="tech-card" style="border-left-color:var(--warn)">
+<h4 style="color:var(--warn)">⑥ 架构微前端化消除iframe</h4>
+<p><strong>现状</strong>：门户端与工作台端iframe嵌套导致状态隔离、体验割裂。</p>
+<p><strong>方向</strong>：采用微前端架构（qiankun/Module Federation），将门户和工作台拆为独立微应用，共享用户状态和路由，消除iframe。统一URL路由（不再用fragment区分门户/工作台）。</p>
+<p><strong>价值</strong>：统一用户体验、浏览器前进后退正常、移动端适配可行、自动化测试可覆盖。</p>
+</div>
+
+<h3>7.3 长期优化（12个月+）</h3>
+<div class="tech-card" style="border-left-color:var(--accent2)">
+<h4 style="color:var(--accent2)">⑦ 流程知识图谱化</h4>
+<p><strong>现状</strong>：流程、要素、文件之间是关联关系，但未形成图谱化知识网络。</p>
+<p><strong>方向</strong>：构建企业流程知识图谱——以流程节点为实体，角色/风险/指标/文件为属性或关系，形成可图查询的知识网络。支持自然语言查询（"哪些流程涉及采购岗位？"）、流程影响分析（"修改某角色后影响哪些流程？"）、知识推荐（学习某流程后推荐相关流程）。</p>
+<p><strong>价值</strong>：从"流程管理"升级到"流程智能"，支撑企业知识沉淀与复用。</p>
+</div>
+
+<div class="tech-card" style="border-left-color:var(--accent2)">
+<h4 style="color:var(--accent2)">⑧ 低代码流程应用生成</h4>
+<p><strong>现状</strong>：BPA仅做流程设计和管理，流程执行需对接外部系统。</p>
+<p><strong>方向</strong>：基于流程建模数据自动生成执行表单和审批应用——流程图中的活动节点自动生成表单字段，角色岗位映射为审批人，流程路径转为审批流。实现"设计即执行"，从BPA延伸到BPM（执行）。</p>
+<p><strong>价值</strong>：打通流程设计到执行的最后一公里，成为企业流程中台。</p>
+</div>
+
+<h3>优化路线图总览</h3>
+<div class="table-wrap">
+<table>
+<tr><th style="width:60px">阶段</th><th style="width:100px">时间</th><th style="width:180px">优化方向</th><th style="width:80px">优先级</th><th>预期价值</th></tr>
+<tr><td rowspan="3" style="color:var(--accent3);font-weight:700">短期</td><td rowspan="3">3-6个月</td><td>移动端适配</td><td>P1</td><td>宣贯覆盖率提升50%+</td></tr>
+<tr><td>Excel导入增强</td><td>P2</td><td>实施周期缩短30%</td></tr>
+<tr><td>权限可视化</td><td>P2</td><td>权限配置效率提升</td></tr>
+<tr><td rowspan="3" style="color:var(--warn);font-weight:700">中期</td><td rowspan="3">6-12个月</td><td>AI辅助建模</td><td>P1</td><td>流程设计效率3-5倍</td></tr>
+<tr><td>流程仿真监控</td><td>P1</td><td>从设计到运营升级</td></tr>
+<tr><td>微前端化</td><td>P2</td><td>体验统一、移动端可行</td></tr>
+<tr><td rowspan="2" style="color:var(--accent2);font-weight:700">长期</td><td rowspan="2">12个月+</td><td>流程知识图谱</td><td>P2</td><td>流程智能查询与分析</td></tr>
+<tr><td>低代码应用生成</td><td>P3</td><td>BPA→BPM全链路打通</td></tr>
+</table>
+</div>
+
+</div>
+
+<!-- ========== 总结 ========== -->
+<div class="section">
+<h2>总结</h2>
+<p>微宏BPA流程规划设计平台是一款<strong>定位清晰、功能完整</strong>的企业级流程架构管理产品。其核心价值在于用"分层分级架构树+管理要素关联+双端架构"体系，将企业散落的流程资产结构化、体系化、可治理化。</p>
+
+<table>
+<tr><th style="width:100px">维度</th><th style="width:40%">优势</th><th style="width:40%">待提升</th><th style="width:20%">结论</th></tr>
+<tr><td>功能完整度</td><td>15个一级模块、80+二/三级模块、13个流程视图、6类要素体系、BPMA引擎7个三级模块</td><td>部分功能因试用账号权限未完全验证</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>架构设计</td><td>双端架构清晰、L0-L4分层分级、角色岗位双关联精妙、多根节点支持</td><td>iframe嵌套需优化</td><td>⭐⭐⭐⭐</td></tr>
+<tr><td>用户体验</td><td>门户端13个视图维度、绿色高亮贴心、导出三格式、版本管理</td><td>移动端不可用，工作台学习曲线陡</td><td>⭐⭐⭐</td></tr>
+<tr><td>技术先进性</td><td>Visio导入、文件自动生成、业务模块自定义、Excel批量导入</td><td>Canvas渲染不可捕获，AI能力缺失</td><td>⭐⭐⭐</td></tr>
+<tr><td>扩展性</td><td>多根节点、自定义模版、BPMA引擎7个三级模块、业务模块管理</td><td>与ERP/OA集成能力未明确</td><td>⭐⭐⭐⭐</td></tr>
+</table>
+
+<div class="note green"><strong>一句话总结</strong>：BPA平台是一套"重设计、轻执行"的企业级流程架构管理工具，15个一级模块、80+二/三级模块覆盖流程全生命周期。其L0-L4分层分级架构树、角色岗位双关联机制、BPMA审批引擎三大核心设计，使其适合中大型企业从0到1搭建流程体系。若能在AI辅助建模、流程仿真执行、移动端适配三个方向突破，有望从"流程管理工具"升级为"流程智能中台"。</div>
+
+</div>
+
+<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">
+<p>本Wiki基于微宏BPA流程规划设计平台体验试用环境（账号TY0177）实际探索 + 《BPA流程规划设计平台试用体验指引》操作手册整理</p>
+<p>整理日期：2026-07-05 ｜ 数据来源：实际操作探索 + 操作手册PDF（16页）</p>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<script src="./_shared/js/mermaid.min.js"></script>
+<script>
+mermaid.initialize({startOnLoad:true,theme:'neutral',securityLevel:'loose',flowchart:{useMaxWidth:true,htmlLabels:true},sequence:{useMaxWidth:true}});
+</script>
+</body>
+</html>
